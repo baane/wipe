@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<internationalisation default-locale="en-US" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<description>
+	</description>
+	<language locale="de-DE">
+		<entry id="de" translation="Deutsch"/>
+		<entry id="en" translation="Englisch"/>
+	</language>
+	<language locale="en-US">
+		<entry id="de" translation="German"/>
+		<entry id="en" translation="English"/>
+	</language>
+</internationalisation>

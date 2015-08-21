@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<internationalisation default-locale="en-US" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<description>
+	</description>
+	<language locale="de-DE">
+		<entry id="DEFAULT" translation="Frei"/>
+		<entry id="DONE" translation="Fertig"/>
+		<entry id="CONFIRMED" translation="Bestätigt"/>
+		<entry id="SUBSCRIBE" translation="Angemeldet"/>
+		<entry id="SUBSTITUTES_BENCH" translation="Ersatzbank"/>
+	</language>
+	<language locale="en-US">
+		<entry id="DEFAULT" translation="Free"/>
+		<entry id="DONE" translation="Done"/>
+		<entry id="CONFIRMED" translation="Confirmed"/>
+		<entry id="SUBSCRIBE" translation="Subscribe"/>
+		<entry id="SUBSTITUTES_BENCH" translation="Substitutes bench" />
+	</language>
+</internationalisation>

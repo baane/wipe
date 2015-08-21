@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<internationalisation default-locale="en-US" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<description/>
+	<language locale="de-DE">
+		<entry id="File" translation="Datei"/>
+		<entry id="New" translation="Neu"/>
+		<entry id="Load" translation="Laden"/>
+		<entry id="Save" translation="Speichern"/>
+		<entry id="Save as" translation="Speichern unter"/>
+		<entry id="Manuell reset" translation="Hart zurücksetzen"/>
+		<entry id="Tuesday warning" translation="Dienstagswarnung"/>
+		<entry id="select_language" translation="Sprache wählen"/>
+		<entry id="Exit" translation="Beenden"/>
+		
+		<entry id="Edit" translation="Bearbeiten"/>
+		<entry id="Add character" translation="Charakter hinzufügen"/>
+		<entry id="Add instance" translation="Instanz hinzufügen"/>
+		<entry id="Remove character" translation="Charakter löschen"/>
+		<entry id="Remove instance" translation="Instanz löschen"/>
+		
+		<!-- In dialogs -->
+		<entry id="language" translation="Sprache"/>
+		
+		<entry id="Choose character" translation="Wähle Charakter"/>
+		<entry id="Character name" translation="Name"/>
+		<entry id="Character class" translation="Klasse"/>
+		<entry id="Add" translation="Hinzufügen"/>
+		<entry id="Please insert character informations" translation="Charakter hinzufügen"/>
+		<entry id="character_name" translation="Charaktername"/>
+		<entry id="Please insert instance informations" translation="Instanz hinzufügen"/>
+		<entry id="instance_name" translation="Instanzname"/>
+		<entry id="instance_reset_type" translation="Reset"/>
+		<entry id="Choose instance" translation="Wähle Instanz"/>
+		
+		<entry id="changes_after_restart" translation="Änderungen werden erst nach Neustart des Programm übernommen."/>
+	</language>
+	<language locale="en-US">
+		<entry id="File" translation="File"/>
+		<entry id="New" translation="New"/>
+		<entry id="Load" translation="Load"/>
+		<entry id="Save" translation="Save"/>
+		<entry id="Save as" translation="Save as"/>
+		<entry id="Manuell reset" translation="Manuell reset"/>
+		<entry id="Tuesday warning" translation="Tuesday warning"/>
+		<entry id="select_language" translation="Select language"/>
+		<entry id="Exit" translation="Exit"/>
+		
+		<entry id="Edit" translation="Edit"/>
+		<entry id="Add character" translation="Add Character"/>
+		<entry id="Add instance" translation="Add Instance"/>
+		<entry id="Remove character" translation="Remove Character"/>
+		<entry id="Remove instance" translation="Remove Instance"/>
+		
+		<!-- In dialogs -->
+		<entry id="language" translation="Language"/>
+		
+		<entry id="Choose character" translation="Choose character"/>
+		<entry id="Character name" translation="Character name"/>
+		<entry id="Character class" translation="Character class"/>
+		<entry id="Add" translation="Add"/>
+		<entry id="Please insert character informations" translation="Please insert character informations"/>
+		<entry id="character_name" translation="Character name"/>
+		<entry id="Please insert instance informations" translation="Please insert instance informations"/>
+		<entry id="instance_name" translation="Instance name"/>
+		<entry id="instance_reset_type" translation="Reset"/>
+		<entry id="Choose instance" translation="Choose instance"/>
+		
+		<entry id="changes_after_restart" translation="Changes only take effect after restart."/>
+	</language>
+</internationalisation>

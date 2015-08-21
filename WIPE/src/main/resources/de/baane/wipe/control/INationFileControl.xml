@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<internationalisation default-locale="en-US" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<description/>
+	<language locale="de-DE">
+		<entry id="load" translation="Öffnen"/>
+		<entry id="save_as" translation="Speichern unter"/>
+		
+		<!-- Questions -->
+		<entry id="save_question" translation="Der letzte Stand wurde noch nicht gespeichert.\nSoll gespeichert werden?"/>
+		<entry id="check_save_status" translation="Der letzte Speicherstand ist hinterm letzten Mittwoch.\nMöchtest du den Fortschritt zurücksetzen?"/>
+		
+		<entry id="save_file_failed" translation="Datei speichern ist fehlgeschlagen"/>
+	</language>
+	<language locale="en-US">
+		<entry id="load" translation="Open"/>
+		<entry id="save_as" translation="Save as"/>
+		
+		<!-- Questions -->
+		<entry id="save_question" translation="Do you want to save the current progress?"/>
+		<entry id="check_save_status" translation="Last save file is before last Wednesday.\nDo you want to reset the progress?"/>
+		
+		<entry id="save_file_failed" translation="Failed to save data in file"/>
+	</language>
+</internationalisation>

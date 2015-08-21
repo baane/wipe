@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<internationalisation default-locale="en-US" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<description>
+	</description>
+	<language locale="de-DE">
+		<entry id="DRUID" translation="Druide"/>
+		<entry id="HUNTER" translation="Jäger"/>
+		<entry id="MAGE" translation="Magier"/>
+		<entry id="PALADIN" translation="Paladin"/>
+		<entry id="PRIEST" translation="Priest"/>
+		<entry id="ROGUE" translation="Schurke"/>
+		<entry id="SHAMAN" translation="Schamane"/>
+		<entry id="WARLOCK" translation="Hexenmeister"/>
+		<entry id="WARRIOR" translation="Krieger"/>
+		<entry id="DEATH_KNIGHT" translation="Todesritter"/>
+	</language>
+	<language locale="en-US">
+		<entry id="DRUID" translation="Druid" />
+		<entry id="HUNTER" translation="Hunter"/>
+		<entry id="MAGE" translation="Mage"/>
+		<entry id="PALADIN" translation="Paladin"/>
+		<entry id="PRIEST" translation="Priest"/>
+		<entry id="ROGUE" translation="Rogue"/>
+		<entry id="SHAMAN" translation="Shaman"/>
+		<entry id="WARLOCK" translation="Warlock"/>
+		<entry id="WARRIOR" translation="Warrior"/>
+		<entry id="DEATH_KNIGHT" translation="Death Knight"/>
+	</language>
+</internationalisation>
