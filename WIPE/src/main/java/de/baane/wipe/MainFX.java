@@ -42,7 +42,6 @@ public class MainFX extends Application {
 	private VBox initGUI(Stage stage) {
 		// Initialize content
 		TableControlSwing c = new TableControlSwing();
-		c.checkSaveStatus();
 		final SwingNode swingNode = new SwingNode();
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -50,10 +49,11 @@ public class MainFX extends Application {
 				swingNode.setContent(c.askView());
 			}
 		});
-		//TODO
+		//FIXME: Full functions in FX
 //		TableControl c = new TableControl();
-//		c.checkSaveStatus();
 //		TableViewFX swingNode = c.askView();
+		
+		c.checkSaveStatus();
 		
 		// Initialize menu
 		FileMenu menuBar = new FileMenu(c);
@@ -80,11 +80,14 @@ public class MainFX extends Application {
 		// Add window icon, if available
 		try {
 			InputStream stream = MainFX.class.getResourceAsStream("Wipe.png");
-			Image image = new Image(stream);
-			stream.close();
-			INSTANCE.getIcons().add(image);
+			if (stream != null) {
+				Image image = new Image(stream);
+				stream.close();
+				INSTANCE.getIcons().add(image);
+			} else 
+				System.err.println("Couldn't load stage icon.");
 		} catch (IOException e) {
-			System.err.println("Couldn't load stage icon.");
+			System.err.println("Error while setting window icon.");
 		}
 		
 		// Ask last window properties
