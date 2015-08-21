@@ -18,6 +18,9 @@ import de.baane.wipe.model.CharacterClass;
 import de.baane.wipe.model.Instance;
 import de.baane.wipe.model.RaidStatus;
 import de.baane.wipe.view.TableViewFX;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 public class TableControl extends TableControlBase {
 	private class ColorRenderer extends DefaultTableCellRenderer {
@@ -53,9 +56,9 @@ public class TableControl extends TableControlBase {
 		
 		private int getBrightness(Color c) {
 		    return (int) Math.sqrt(
-		      c.getRed() * c.getRed() * .241 +
-		      c.getGreen() * c.getGreen() * .691 +
-		      c.getBlue() * c.getBlue() * .068);
+			      c.getRed() * c.getRed() * .241 +
+			      c.getGreen() * c.getGreen() * .691 +
+			      c.getBlue() * c.getBlue() * .068);
 		}
 	}
 	
@@ -66,14 +69,28 @@ public class TableControl extends TableControlBase {
 		load(FileControl.SAVE_FILE);
 	}
 	
-	/**
-	 * TODO: REFUCKTOR!
-	 */
 	@Override
 	public void fillTable() {
 		ArrayList<Character> characters = getData().getCharacters();
 		ArrayList<Instance> instances = getData().getInstances();
 		
+		String[] columnNames = readColumnNames(instances);
+		updateProgresses(characters, instances);
+		
+		view.setModel(characters, columnNames);
+		
+//		view.getModel().addTableModelListener(getTableModelListener());
+		addTableColorRenderer();
+//		initCellEditor();
+	}
+
+	/**
+	 * Reading column names by saved instances.
+	 * 
+	 * @param instances
+	 * @return Array with instance names.
+	 */
+	private String[] readColumnNames(ArrayList<Instance> instances) {
 		String[] columnNames = new String[instances.size()+1];
 		int j = 0;
 		columnNames[j] = localize("Character");
@@ -82,57 +99,42 @@ public class TableControl extends TableControlBase {
 			j++;
 			columnNames[j] = i.getName();
 		}
-		
-		Object[][] content = new Object[characters.size()][instances.size()];
-		
-		int charIdx = 0;
+		return columnNames;
+	}
+
+	private void updateProgresses(ArrayList<Character> characters, ArrayList<Instance> instances) {
 		for (Character c : characters) {
 			if(DEBUG) System.out.println("Filltable (CHAR) :: "+c.getName());
 			LinkedHashMap<Instance, RaidStatus> progress = c.getProgresses();
 			
-			// init
-			Object[] charIniEntryRow = new Object[columnNames.length];
-			for (int i = 0; i < charIniEntryRow.length; i++) charIniEntryRow[i] = RaidStatus.DEFAULT;
-			charIniEntryRow[0] = c.getName();
-			
-//			for (Entry<Instance, RaidStatus> e : progress.entrySet()) {
-//				int idx = findColumnNameIdx(columnNames, e.getKey().getName());
-//				if(idx == -1) continue;
-//				charIniEntryRow[idx] = e.getValue();
-//				if (DEBUG) {
-//					System.out.println("Filltable :: " + c.getName() + " | " 
-//										+ e.getKey().getName() + "("+idx+"): " 
-//										+ e.getValue());
-//				}
-//			}
-			content[charIdx] = charIniEntryRow;
-			charIdx++;
+			A: for (Instance ini : instances) {
+				for (Entry<Instance, RaidStatus> e : progress.entrySet()) {
+					if (ini.equals(e.getKey())) continue A;
+				}
+				progress.put(ini, RaidStatus.DEFAULT);
+			}
 		}
-		
-		view.setModel(content, columnNames);
-//		view.setModel(characters, columnNames);
-		
-//		view.getModel().addTableModelListener(getTableModelListener());
-		addTableColorRenderer();
-//		initCellEditor();
 	}
 	
+	//TODO
 	private void addTableColorRenderer() {
 //		askView().getTable().setDefaultRenderer(Object.class, new ColorRenderer());
 	}
 
-//	private void initCellEditor() {
-//		TableViewFX table = askView().getTable();
-//		for (int i = 0; i < table.getColumnModel().getColumnCount(); i++) {
-//			if (!table.getColumnClass(i).equals(RaidStatus.class)) continue;
-//			TableColumn column = table.getColumnModel().getColumn(i);
-//			JComboBox<RaidStatus> box = new JComboBox<RaidStatus>();
-//			for (RaidStatus s : RaidStatus.values()) {
-//				box.addItem(s);
-//			}
+	//TODO
+	private void initCellEditor() {
+		TableView<Character> table = askView().getTable();
+		for (int i = 0; i < table.getColumns().size(); i++) {
+			if (!table.getColumns().get(i).equals(RaidStatus.class)) continue;
+			TableColumn column = table.getColumns().get(i);
+			ComboBox<RaidStatus> box = new ComboBox<RaidStatus>();
+			for (RaidStatus s : RaidStatus.values()) {
+				box.getItems().add(s);
+			}
+			//TODO
 //			column.setCellEditor(new DefaultCellEditor(box));
-//		}
-//	}
+		}
+	}
 	
 	public TableViewFX askView() {
 		return view;

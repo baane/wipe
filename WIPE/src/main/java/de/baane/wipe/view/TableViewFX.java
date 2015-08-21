@@ -4,21 +4,21 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import de.baane.wipe.model.Character;
-import de.baane.wipe.model.CharacterClass;
 import de.baane.wipe.model.Instance;
 import de.baane.wipe.model.RaidStatus;
-import javafx.collections.FXCollections;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 public class TableViewFX extends VBox {
 	
-	private TableView table;
+	private TableView<Character> table;
 	private ObservableList model;
+	private ObservableList list;
 	
 	public TableViewFX() {
 		initGUI();
@@ -28,129 +28,55 @@ public class TableViewFX extends VBox {
 		this.getChildren().add(getTable());
 	}
 	
-	public TableView getTable() {
+	public TableView<Character> getTable() {
 		if (table == null) {
 			table = new TableView<>();
 			table.setEditable(true);
 			table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-//			table.getColumns().add(new TableColumn<>("Character"));
 			
 			table.prefWidthProperty().bind(this.prefWidthProperty());
 			table.prefHeightProperty().bind(this.prefHeightProperty());
 			table.resize(getWidth(), getHeight());
-			
-			super.layoutChildren();
 		}
 		return table;
 	}
 	
-//	public DefaultTableModel getModel() {
-//		if (model == null) {
-//			String[] columnNames = { "Instance" };
-//			model = new DefaultTableModel(null, columnNames);
-//		}
-//		return model;
-//	}
-	
-	
-	public void setModel(Object[][] content, String[] columnNames) {
-//		getContentTest();
-		
+	public void setModel(ArrayList<Character> characters, String[] columnNames) {
 		getTable().getItems().clear();
 		getTable().getColumns().clear();
 		
+		// Add columns
 		for (String string : columnNames) {
-			string = string.equals("charakter") ? "name" : string;
 			TableColumn col = new TableColumn<>(string);
-			//TODO
-//	        TableColumn emailCol = new TableColumn(string);
-//	        emailCol.setMinWidth(200);
-	        string = string.toLowerCase();
-//	        emailCol.setCellValueFactory(
-//	                new PropertyValueFactory<>(lowerCase));
-			col.setCellValueFactory(
-					new PropertyValueFactory<>(string));
+			
+			col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Character, Object>,
+					ObservableValue<String>>() {
+				@Override
+				public ObservableValue<String> call(TableColumn.CellDataFeatures<Character, Object> param) {
+					String columnName = param.getTableColumn().getText();
+					if (columnName.startsWith("Chara"))
+							return new SimpleStringProperty(param.getValue().getName());
+					
+					LinkedHashMap<Instance,RaidStatus> progresses = param.getValue().getProgresses();
+					for (Instance i : progresses.keySet()) {
+						if (!i.getName().equals(param.getTableColumn().getText())) continue;
+						RaidStatus raidStatus = progresses.get(i);
+						if (raidStatus != null) {
+							String value = raidStatus.name();
+							return new SimpleStringProperty(value);
+						}
+					}
+					return new SimpleStringProperty(RaidStatus.SUBSTITUTES_BENCH.name());
+				}
+			});
+			
 			getTable().getColumns().add(col);
 		}
-//		ObservableList value = FXCollections.observableArrayList("Test");
-//		table.setItems(value);
-		for (int i = 0; i < content.length; i++) {
-			Object[] row = content[i];
-			ObservableList list = FXCollections.observableArrayList();
-			for (int j = 0; j < row.length; j++) {
-//				Object object = row[j];
-				String object = String.valueOf(row[j]);
-				Character ch = new Character(0, object, null);
-				list.add(ch);
-			}
-			getTable().getItems().add(list);
+		
+		// Add data
+		for (Character c : characters) {
+			getTable().getItems().add(c);
 		}
-	}
-	
-	private TableView getContentTest() {
-		table = new TableView();
-//		table.setEditable(true);
-		
-		TableColumn idCol = new TableColumn("Id");
-		TableColumn nameCol = new TableColumn<>("Name");
-		TableColumn classCol = new TableColumn("Class");
-		TableColumn<Character, LinkedHashMap<Instance, RaidStatus>> statusCol = new TableColumn<>("Progresses");
-		idCol.setCellValueFactory(
-				new PropertyValueFactory<>("Id"));
-		
-		nameCol.setCellValueFactory(
-				new PropertyValueFactory<>("name"));
-		
-		classCol.setCellValueFactory(
-				new PropertyValueFactory<>("charClass"));
-		
-		statusCol.setCellValueFactory(
-				new PropertyValueFactory<>("progresses"));
-		table.getColumns().addAll(idCol, nameCol, classCol, statusCol);
-		
-//		table.setItems(initData());
-		
-		return table;
-	}
-	
-	private ObservableList<Character> initData() {
-		de.baane.wipe.model.Character c1 = new de.baane.wipe.model.Character(1, "Zottel", CharacterClass.WARLOCK);
-		LinkedHashMap<Instance, RaidStatus> progresses = new LinkedHashMap<Instance, RaidStatus>();
-		progresses.put(new Instance(0, "Test INi"), RaidStatus.CONFIRMED);
-		c1.setProgresses(progresses);
-		de.baane.wipe.model.Character c2 = new de.baane.wipe.model.Character(2, "Caelean", CharacterClass.PRIEST);
-		return FXCollections.observableArrayList(c1, c2);
-	}
-
-	public void setModel(ArrayList<Character> characters, String[] columnNames) {
-		getContentTest();
-		
-//		getTable().getItems().clear();
-//		getTable().getColumns().clear();
-//		
-//		for (String string : columnNames) {
-//			TableColumn col = new TableColumn<>(string);
-//			//TODO
-////	        TableColumn emailCol = new TableColumn(string);
-////	        emailCol.setMinWidth(200);
-//	        String lowerCase = string.toLowerCase();
-////	        emailCol.setCellValueFactory(
-////	                new PropertyValueFactory<>(lowerCase));
-//	        lowerCase = lowerCase.equals("charakter") ? "name" : lowerCase;
-//			col.setCellValueFactory(
-//					new PropertyValueFactory<>(lowerCase));
-//			getTable().getColumns().add(col);
-//		}
-////		ObservableList value = FXCollections.observableArrayList("Test");
-////		table.setItems(value);
-//		ObservableList list = FXCollections.observableArrayList();
-//		for (Character c : characters) {
-////			for (int j = 0; j < row.length; j++) {
-////				Object object = row[j];
-//				list.add(c);
-////			}
-//		}
-//		getTable().getItems().add(list);
 	}
 	
 }
