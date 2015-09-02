@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import de.baane.wipe.MainFX;
+import de.fhg.iml.vlog.ination.INation;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -13,6 +14,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 
 public class Message {
+	private static final INation INATION = INation.openAndRegister(Message.class);
 	
 	public static String showInput(String title, String text) {
 		TextInputDialog d = new TextInputDialog();
@@ -75,9 +77,7 @@ public class Message {
 //		alert.setHeaderText(null);
 		alert.setContentText(text);
 		
-		ButtonType yes = new ButtonType("Yes", ButtonData.YES);
-		ButtonType no = new ButtonType("No", ButtonData.NO);
-		alert.getButtonTypes().setAll(yes, no);
+		alert.getButtonTypes().setAll(yesBtn(), noBtn());
 		
 		Optional<ButtonType> option = alert.showAndWait();
 		return option.isPresent() ? option.get() : null;
@@ -91,15 +91,12 @@ public class Message {
 		Alert alert = createAlert(type);
 		alert.setContentText(text);
 		
-		ButtonType yes = new ButtonType("Yes", ButtonData.YES);
-		ButtonType no = new ButtonType("No", ButtonData.NO);
-		ButtonType cancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
-		alert.getButtonTypes().setAll(yes, no, cancel);
+		alert.getButtonTypes().setAll(yesBtn(), noBtn(), cancelBtn());
 		
 		Optional<ButtonType> option = alert.showAndWait();
 		return option.isPresent() ? option.get() : null;
 	}
-	
+
 	public static void showInformation(String text) {
 		Alert alert = createAlert(AlertType.INFORMATION);
 		alert.setContentText(text);
@@ -156,6 +153,21 @@ public class Message {
 			return imageView;
 		} catch (Exception e) {}
 		return null;
+	}
+
+
+	private static ButtonType yesBtn() {
+		return new ButtonType(localize("Yes"), ButtonData.YES);
+	}
+	private static ButtonType noBtn() {
+		return new ButtonType(localize("No"), ButtonData.NO);
+	}
+	private static ButtonType cancelBtn() {
+		return new ButtonType(localize("Cancel"), ButtonData.CANCEL_CLOSE);
+	}
+	
+	private static String localize(String text) {
+		return INATION.getTranslation(text);
 	}
 	
 }

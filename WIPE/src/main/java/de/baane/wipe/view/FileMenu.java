@@ -215,6 +215,7 @@ public class FileMenu extends MenuBar {
 		// Separator
 		menu.getItems().add(new SeparatorMenuItem());
 		
+		//TODO: add rectangle to character
 		// Delete
 		menu.getItems().add(initMenuItem(localize("Remove character"), 
 				e -> {

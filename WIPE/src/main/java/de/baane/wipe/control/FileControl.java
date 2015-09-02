@@ -23,7 +23,7 @@ public class FileControl {
 	private static final INation INATION = INation.openAndRegister(FileControl.class);
 
 	public static boolean isSaved = true;
-	public static File SAVE_FILE = new File("save_wow_progress.raid");
+	public static File SAVE_FILE;
 	
 	public static void openLastFile() {
 		String property = PropertyIO.readProperty(WOW_LASTSAVEFILE);
@@ -32,7 +32,7 @@ public class FileControl {
 	
 	public static File openLastDirectory() {
 		openLastFile();
-		if(!SAVE_FILE.exists()) SAVE_FILE = getCurrentPath();
+		if(SAVE_FILE == null ||!SAVE_FILE.exists()) SAVE_FILE = getCurrentPath();
 		
 		return SAVE_FILE.isFile() ? SAVE_FILE.getParentFile() : SAVE_FILE;
 	}

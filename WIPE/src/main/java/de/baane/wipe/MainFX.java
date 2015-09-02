@@ -2,16 +2,14 @@ package de.baane.wipe;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import javax.swing.SwingUtilities;
+import java.net.URL;
 
 import de.baane.wipe.control.FileControl;
-import de.baane.wipe.control.TableControlSwing;
+import de.baane.wipe.control.TableControl;
 import de.baane.wipe.control.WindowControl;
 import de.baane.wipe.control.data.PropertyIO;
 import de.baane.wipe.view.FileMenu;
 import javafx.application.Application;
-import javafx.embed.swing.SwingNode;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
@@ -31,6 +29,8 @@ public class MainFX extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		Scene scene = new Scene(initGUI(stage), 500, 500);
+		URL css = MainFX.class.getResource("style.css");
+		if (css != null) scene.getStylesheets().add(css.toExternalForm());
 		
 		stage.setScene(scene);
 		stage.show();
@@ -40,19 +40,7 @@ public class MainFX extends Application {
 	}
 	
 	private VBox initGUI(Stage stage) {
-		// Initialize content
-		TableControlSwing c = new TableControlSwing();
-		final SwingNode swingNode = new SwingNode();
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				swingNode.setContent(c.askView());
-			}
-		});
-		//FIXME: Full functions in FX
-//		TableControl c = new TableControl();
-//		TableViewFX swingNode = c.askView();
-		
+		TableControl c = new TableControl();
 		c.checkSaveStatus();
 		
 		// Initialize menu
@@ -60,7 +48,7 @@ public class MainFX extends Application {
 		
 		VBox pane = new VBox();
 		pane.getChildren().add(menuBar);
-		pane.getChildren().add(swingNode);
+		pane.getChildren().add(c.askView());
 		
 		// Add listener for saving window properties and checking save status 
 		stage.setOnCloseRequest(e -> {

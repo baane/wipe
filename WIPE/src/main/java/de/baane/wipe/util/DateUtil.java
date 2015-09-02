@@ -14,12 +14,13 @@ public class DateUtil {
 	
 	public static boolean checkWednesdayReset() {
 		File saveFile = FileControl.SAVE_FILE;
-		if (!saveFile.exists()) return false;
+		if (saveFile == null || !saveFile.exists()) return false;
 		
 		Date saveDate = new Date(saveFile.lastModified());
 		return resetIds(saveDate, new Date());
 	}
 	
+	@SuppressWarnings("unused")
 	private void checkDailyReset() {
 		//TODO: implement
 	}

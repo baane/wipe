@@ -76,17 +76,14 @@ public class AddCharacterDialog {
 							setGraphic(null);
 						} else {
 							setText(item.toString());
-							java.awt.Color o = item.getColor();
-							Color c = Color.rgb(o.getRed(), o.getGreen(), o.getBlue());
-							rectangle.setFill(c);
+							rectangle.setFill(item.getColor());
+							rectangle.setStroke(Color.BLACK);
 							setGraphic(rectangle);
 						}
 					}
 				};
 			}
 		});
-		
-		
 
 		grid.add(new Label(localize("Character name")), 0, 0);
 		grid.add(charName, 1, 0);

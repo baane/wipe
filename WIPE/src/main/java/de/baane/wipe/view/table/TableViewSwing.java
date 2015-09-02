@@ -1,4 +1,4 @@
-package de.baane.wipe.view;
+package de.baane.wipe.view.table;
 
 import java.awt.BorderLayout;
 
@@ -9,6 +9,7 @@ import javax.swing.table.DefaultTableModel;
 
 import de.baane.wipe.model.RaidStatus;
 
+@Deprecated
 public class TableViewSwing extends JPanel {
 	private static final long serialVersionUID = -1011547732583338893L;
 	

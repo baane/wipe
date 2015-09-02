@@ -60,7 +60,8 @@ import org.xml.sax.SAXException;
 
 import de.fhg.iml.vlog.xml.DomUtil;
 
-/** INation means internationalization. This class is an implementation for an easy to use multiple language support.
+/** 
+ * INation means internationalization. This class is an implementation for an easy to use multiple language support.
  * <p>
  * The several static methods of INation are needed for the ordinary use of the INation implementation. <br/>
  * Use openAndRegister() to load an INation resource file and obtain an INation object for it. 

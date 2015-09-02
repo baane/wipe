@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<internationalisation default-locale="en-US" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<description/>
+	<language locale="de-DE">
+		<entry id="Yes" translation="Ja"/>
+		<entry id="No" translation="Nein"/>
+		<entry id="Cancel" translation="Abbrechen"/>
+	</language>
+	<language locale="en-US">
+		<entry id="Yes" translation="Yes"/>
+		<entry id="No" translation="No"/>
+		<entry id="Cancel" translation="Cancel"/>
+	</language>
+</internationalisation>

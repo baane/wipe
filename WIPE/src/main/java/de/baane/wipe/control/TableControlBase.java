@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import de.baane.wipe.control.data.DataIO;
+import de.baane.wipe.control.data.PropertyIO;
 import de.baane.wipe.model.Character;
 import de.baane.wipe.model.CharacterClass;
 import de.baane.wipe.model.DataHolder;
@@ -15,7 +16,7 @@ import de.fhg.iml.vlog.ination.INation;
 public class TableControlBase {
 	private static final INation INATION = INation.openAndRegister(TableControlBase.class); 
 	
-	protected static final boolean DEBUG = true;
+	protected static final boolean DEBUG = false;
 	
 	private DataHolder data;
 	
@@ -24,10 +25,13 @@ public class TableControlBase {
 	}
 	
 	public void load(File file) {
-		if (file.exists()) FileControl.SAVE_FILE = file;
+		if (file == null || !file.exists()) return;
+		
+		FileControl.SAVE_FILE = file;
 		
 		if (DEBUG) System.out.println("LOAD");
 		data = DataIO.loadFromXMl(FileControl.SAVE_FILE);
+		PropertyIO.saveToProperty(FileControl.WOW_LASTSAVEFILE, file.getAbsolutePath());
 		if (data == null) createNewData();
 		fillTable();
 	}

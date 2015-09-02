@@ -1,20 +1,19 @@
 package de.baane.wipe.model;
 
-import java.awt.Color;
-
 import de.fhg.iml.vlog.ination.INation;
+import javafx.scene.paint.Color;
 
 public enum CharacterClass {
-	DRUID(Color.decode("#FF7D0A")),
-	HUNTER(Color.decode("#ABD473")),
-	MAGE(Color.decode("#69CCF0")),
-	PALADIN(Color.decode("#F58CBA")),
+	DRUID(Color.valueOf("#FF7D0A")),
+	HUNTER(Color.valueOf("#ABD473")),
+	MAGE(Color.valueOf("#69CCF0")),
+	PALADIN(Color.valueOf("#F58CBA")),
 	PRIEST(Color.WHITE),
-	ROGUE(Color.decode("#FFF569")),
-	SHAMAN(Color.decode("#0070DE")),
-	WARLOCK(Color.decode("#9482C9")),
-	WARRIOR(Color.decode("#C79C6E")),
-	DEATH_KNIGHT(Color.decode("#C41F3B"));
+	ROGUE(Color.valueOf("#FFF569")),
+	SHAMAN(Color.valueOf("#0070DE")),
+	WARLOCK(Color.valueOf("#9482C9")),
+	WARRIOR(Color.valueOf("#C79C6E")),
+	DEATH_KNIGHT(Color.valueOf("#C41F3B"));
 
 	private static final INation INATION = INation.openAndRegister(CharacterClass.class);
 	

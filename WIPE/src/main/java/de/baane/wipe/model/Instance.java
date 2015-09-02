@@ -46,6 +46,6 @@ public class Instance implements Serializable {
 
 	@Override
 	public String toString() {
-		return getName() + " (" + getId() + " / " + getReset() + ")";
+		return getName() + " (" + getReset() + " reset)";
 	}
 }

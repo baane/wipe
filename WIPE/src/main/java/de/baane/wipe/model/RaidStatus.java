@@ -1,8 +1,7 @@
 package de.baane.wipe.model;
 
-import java.awt.Color;
-
 import de.fhg.iml.vlog.ination.INation;
+import javafx.scene.paint.Color;
 
 public enum RaidStatus {
 	/**
@@ -11,20 +10,20 @@ public enum RaidStatus {
 	 */
 	DEFAULT(Color.WHITE),
 	/** 
-	 * Erledigt 
+	 * Over and done. Finally. 
 	 */
-	DONE(Color.GREEN),
+	DONE(Color.LIMEGREEN),
 	/** 
 	 * Bestätigt<br>
 	 * Guild lead had confirmed your subscribe.
 	 */
-	CONFIRMED(new Color(175, 255, 0)),
+	CONFIRMED(Color.GREENYELLOW),
 	/**
 	 * Angemeldet<br>
 	 * You have subscribed in raid planner. Isn't confirmed now. But you
 	 * wouldn't do anything, because you are also on substitutes bench.
 	 */
-	SUBSCRIBE(Color.YELLOW),
+	SUBSCRIBE(Color.GOLD),
 	/** 
 	 * Abgemeldet<br>
 	 * Free for random raids!
@@ -34,7 +33,7 @@ public enum RaidStatus {
 	 * Ersatzbank<br>
 	 * Maybe free for all, maybe not.
 	 */
-	SUBSTITUTES_BENCH(Color.PINK);
+	SUBSTITUTES_BENCH(Color.LIGHTPINK);
 	
 	private static final INation INATION = INation.openAndRegister(RaidStatus.class);
 	

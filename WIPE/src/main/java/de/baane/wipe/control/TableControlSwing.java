@@ -20,8 +20,10 @@ import de.baane.wipe.model.Character;
 import de.baane.wipe.model.CharacterClass;
 import de.baane.wipe.model.Instance;
 import de.baane.wipe.model.RaidStatus;
-import de.baane.wipe.view.TableViewSwing;
+import de.baane.wipe.util.ColorUtil;
+import de.baane.wipe.view.table.TableViewSwing;
 
+@Deprecated
 public class TableControlSwing extends TableControlBase {
 	private class ColorRenderer extends DefaultTableCellRenderer {
 		private static final long serialVersionUID = -5548144955513457488L;
@@ -34,7 +36,7 @@ public class TableControlSwing extends TableControlBase {
 			
 			if (column == 0) {
 				CharacterClass charClass = getData().getCharacters().get(row).getCharClass();
-				Color color = charClass.getColor();
+				Color color = ColorUtil.getAwtColor(charClass.getColor());
 				
 				setBackground(color);
 				if (getBrightness(color) < 130) setForeground(Color.WHITE);
@@ -44,7 +46,7 @@ public class TableControlSwing extends TableControlBase {
 			}
 			if (value instanceof RaidStatus) {
 				RaidStatus v = (RaidStatus)value;
-				Color color = v.getColor();
+				Color color = ColorUtil.getAwtColor(v.getColor());
 				c.setBackground(color);
 				
 				if (getBrightness(color) < 130) setForeground(Color.WHITE);
