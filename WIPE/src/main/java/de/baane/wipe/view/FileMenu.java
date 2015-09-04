@@ -1,6 +1,8 @@
 package de.baane.wipe.view;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -404,12 +406,21 @@ public class FileMenu extends MenuBar {
 	}
 	
 	private ImageView loadIcon(String iconName) {
+		if (!iconName.endsWith(".png")) iconName += ".png";
+		String iconPath = "icons" + File.separatorChar + iconName;
+		InputStream stream = null;
 		try {
-			if (!iconName.endsWith(".png")) iconName += ".png";
-			String url = Message.class.getResource("icons" + File.separatorChar + iconName).toString();
-			return new ImageView(new Image(url, 16, 16, false, false));
+			stream = FileMenu.class.getResourceAsStream(iconPath);
+			return new ImageView(new Image(stream, 16, 16, false, false));
 		} catch (Exception e) {
+			System.err.println("Icon \"" + iconName + "\" not found in " + iconPath);
 			e.printStackTrace();
+		} finally {
+			if (stream != null) try {
+				stream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
