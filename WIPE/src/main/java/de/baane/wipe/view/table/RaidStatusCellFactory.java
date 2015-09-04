@@ -28,7 +28,8 @@ implements Callback<TableColumn<Character, Object>, TableCell<Character, Object>
 				}
 			}
 		};
-		boxTableCell.getItems().add(FXCollections.observableArrayList(RaidStatus.values()));
+		boxTableCell.getItems().clear();
+		boxTableCell.getItems().addAll(FXCollections.observableArrayList(RaidStatus.values()));
 		return boxTableCell;
 	}
 }
