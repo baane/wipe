@@ -10,140 +10,94 @@ import de.baane.wipe.control.FileControl;
 import de.baane.wipe.model.Character;
 import de.baane.wipe.model.Instance;
 import de.baane.wipe.model.RaidStatus;
-import de.baane.wipe.view.RaidStatusCellFactory;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 @SuppressWarnings("restriction")
-public class TableViewFX extends VBox {
-	
-	private TableView<Character> table;
+public class TableViewFX extends TableView<Character> {
 	
 	public TableViewFX() {
-		initGUI();
+		init();
 	}
 	
-	private void initGUI() {
-		this.getChildren().add(getTable());
-	}
-	
-	public TableView<Character> getTable() {
-		if (table == null) {
-			table = new TableView<>();
-			table.setEditable(true);
-			table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-			
-			table.prefWidthProperty().bind(this.prefWidthProperty());
-			table.prefHeightProperty().bind(this.prefHeightProperty());
-			table.resize(getWidth(), getHeight());
-			
-			table.widthProperty().addListener(new ChangeListener<Object>() {
-				@Override
-				public void changed(
-						ObservableValue<? extends Object> observable,
-						Object oldValue, Object newValue) {
-					TableHeaderRow header = (TableHeaderRow) table.lookup("TableHeaderRow");
-					header.reorderingProperty().addListener(new ChangeListener<Boolean>() {
-						@Override
-						public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-							header.setReordering(false);
-						}
-					});
-				}
-			});
-			
-		}
-		return table;
-	}
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void setModel(ArrayList<Character> characters, String[] columnNames) {
-		getTable().getItems().clear();
-		getTable().getColumns().clear();
+	private void init() {
+		this.setEditable(true);
+		this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		
+		// TODO: Only because of reordering... Look for another solution.
+		this.widthProperty().addListener((ChangeListener<Object>) (observable, oldValue, newValue) -> {
+			TableHeaderRow header = (TableHeaderRow) this.lookup("TableHeaderRow");
+			header.reorderingProperty().addListener(
+					(ChangeListener<Boolean>) (observable1, oldValue1, newValue1) -> 
+						header.setReordering(false));
+		});
+	}
+	
+	public void setModel(ArrayList<Character> characters, String[] columnNames) {
 		// Add columns
+		this.getColumns().clear();
 		for (String colName : columnNames) {
-			TableColumn col = new TableColumn<>(colName);
+			TableColumn<Character, Object> col = new TableColumn<>(colName);
+			col.setCellValueFactory(initEnumCellFactory(columnNames));
 			if (colName.equals(columnNames[0])) {
+				// Use normal text for Character name in first column
 				col.setCellFactory(new CharacterCellFactory());
-				col.setCellValueFactory(initStringCellFactory(columnNames));
 			} else {
-				col.setCellValueFactory(initEnumCellFactory(columnNames));
+				// Use ComboBox for choosable RaidStatus in every else column
 				col.setCellFactory(new RaidStatusCellFactory());
-				col.setOnEditCommit(
-						new EventHandler<CellEditEvent<Character, RaidStatus>>() {
-							@Override
-							public void handle(CellEditEvent<Character,RaidStatus> t) {
-								String columnName = t.getTableView().getColumns().get(t.getTablePosition().getColumn()).getText();
-								Character character = t.getTableView().getItems().get(t.getTablePosition().getRow());
-								LinkedHashMap<Instance, RaidStatus> progresses = character.getProgresses();
-								for (Entry<Instance, RaidStatus> e : progresses.entrySet()) {
-									Instance instanceKey = e.getKey();
-									if (columnName.equals(instanceKey.getName())) {
-										RaidStatus status = t.getNewValue();
-										progresses.put(instanceKey, status);
-										FileControl.isSaved = false;
-									}
-								}
-							}
-						}
-				);
+				col.setOnEditCommit(editEventHandler());
 			}
 			
-			getTable().getColumns().add(col);
+			this.getColumns().add(col);
 		}
 		
 		// Add data
-		for (Character c : characters) {
-			getTable().getItems().add(c);
-		}
+		this.getItems().clear();
+		for (Character c : characters) this.getItems().add(c);
 	}
 
-	private Callback<CellDataFeatures<Character, Object>, ObservableValue<String>> 
-	initStringCellFactory(String[] columnNames) {
-		return param -> {
-			String columnName = param.getTableColumn().getText();
-			if (columnName.startsWith(columnNames[0]))
-					return new SimpleStringProperty(param.getValue().getName());
+	private EventHandler<CellEditEvent<Character, Object>> editEventHandler() {
+		return t -> {
+			TablePosition<Character, Object> tablePosition = t.getTablePosition();
+			TableView<Character> tableView = t.getTableView();
+			String columnName = tableView.getColumns().get(tablePosition.getColumn()).getText();
+			Character character = tableView.getItems().get(tablePosition.getRow());
 			
-			LinkedHashMap<Instance,RaidStatus> progresses = param.getValue().getProgresses();
-			for (Instance i : progresses.keySet()) {
-				if (!i.getName().equals(param.getTableColumn().getText())) continue;
-				RaidStatus raidStatus = progresses.get(i);
-				if (raidStatus != null) {
-					return new SimpleStringProperty(raidStatus.toString());
+			LinkedHashMap<Instance, RaidStatus> progresses = character.getProgresses();
+			for (Entry<Instance, RaidStatus> e : progresses.entrySet()) {
+				Instance instanceKey = e.getKey();
+				if (columnName.equals(instanceKey.getName())) {
+					RaidStatus status = (RaidStatus) t.getNewValue();
+					progresses.put(instanceKey, status);
+					FileControl.isSaved = false;
 				}
 			}
-			return new SimpleStringProperty(RaidStatus.DEFAULT.name());
 		};
 	}
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Callback<CellDataFeatures<Character, RaidStatus>, ObservableValue<RaidStatus>>
+
+	private Callback<CellDataFeatures<Character, Object>, ObservableValue<Object>>
 	initEnumCellFactory(String[] columnNames) {
 		return param -> {
 			String columnName = param.getTableColumn().getText();
 			if (columnName.startsWith(columnNames[0]))
-				return new SimpleObjectProperty(param.getValue().getName());
+				return new SimpleObjectProperty<Object>(param.getValue().getName());
 			
-			LinkedHashMap<Instance,RaidStatus> progresses = param.getValue().getProgresses();
+			LinkedHashMap<Instance, RaidStatus> progresses = param.getValue().getProgresses();
 			for (Instance i : progresses.keySet()) {
-				if (!i.getName().equals(param.getTableColumn().getText())) continue;
+				if (!i.getName().equals(columnName)) continue;
 				RaidStatus raidStatus = progresses.get(i);
-				if (raidStatus != null) {
-					return new SimpleObjectProperty(raidStatus);
-				}
+				if (raidStatus != null)
+					return new SimpleObjectProperty<Object>(raidStatus);
 			}
-			return new SimpleObjectProperty(RaidStatus.DEFAULT);
+			return new SimpleObjectProperty<Object>(RaidStatus.DEFAULT);
 		};
 	}
 	

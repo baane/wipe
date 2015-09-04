@@ -70,8 +70,8 @@ public class MainFX extends Application {
 			InputStream stream = MainFX.class.getResourceAsStream("Wipe.png");
 			if (stream != null) {
 				Image image = new Image(stream);
-				stream.close();
 				INSTANCE.getIcons().add(image);
+				stream.close();
 			} else 
 				System.err.println("Couldn't load stage icon.");
 		} catch (IOException e) {

@@ -2,6 +2,8 @@ package de.baane.wipe.control;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 
 import de.baane.wipe.control.data.DataIO;
 import de.baane.wipe.control.data.PropertyIO;
@@ -13,15 +15,15 @@ import de.baane.wipe.model.InstanceResetType;
 import de.baane.wipe.model.RaidStatus;
 import de.fhg.iml.vlog.ination.INation;
 
-public class TableControlBase {
+public abstract class TableControlBase {
 	private static final INation INATION = INation.openAndRegister(TableControlBase.class); 
 	
-	protected static final boolean DEBUG = false;
+	protected static final boolean DEBUG = true;
 	
 	private DataHolder data;
 	
 	public TableControlBase() {
-//		load(FileControl.SAVE_FILE);
+		load(FileControl.SAVE_FILE);
 	}
 	
 	public void load(File file) {
@@ -59,16 +61,6 @@ public class TableControlBase {
 		if (FileControl.checkSaveStatus()) resetData();
 	}
 	
-	public void fillTable() {}
-	
-	int findColumnNameIdx(String[] columnNames, String name) {
-		for (int k = 0; k < columnNames.length; k++) {
-			String colum = columnNames[k];
-			if (colum.equals(name)) return k;
-		}
-		return -1;
-	}
-
 	public DataHolder getData() {
 		return data;
 	}
@@ -130,47 +122,30 @@ public class TableControlBase {
 	
 	public void resetData() {
 		FileControl.isSaved = false;
-		for (Character c : data.getCharacters()) {
-			c.getProgresses().clear(); //TODO: check
-		}
+		for (Character c : data.getCharacters())
+			c.getProgresses().clear();
 		
 		fillTable();
 	}
 	
-//	private TableModelListener getTableModelListener() {
-//		return new TableModelListener() {
-//			@Override
-//			public void tableChanged(TableModelEvent e) {
-//				int row = e.getFirstRow();
-//				int column = e.getColumn();
-//				TableModel model = (TableModel) e.getSource();
-//				Character character = data.getCharacters().get(row);
-//				
-//				Object cellValue = model.getValueAt(row, column);
-//				updateCell(column, character, cellValue);
-//			}
-//
-//		};
-//	}
-	void updateCell(int column, Character character,
-			Object cellValue) {
-		// Character name cell
-		if (column == 0) {
-			if (cellValue instanceof String)
-				character.setName((String) cellValue);
+	//TODO: Do not use this everytime. Use Observable?
+	public abstract void fillTable();
+	
+	/**
+	 * Refill all instances for each character with the default value.
+	 */
+	protected void updateProgresses(ArrayList<Character> characters, ArrayList<Instance> instances) {
+		for (Character c : characters) {
+			if(DEBUG) System.out.println("Filltable (CHAR) :: "+c.getName());
+			LinkedHashMap<Instance, RaidStatus> progress = c.getProgresses();
+			
+			A: for (Instance ini : instances) {
+				for (Entry<Instance, RaidStatus> e : progress.entrySet()) {
+					if (ini.equals(e.getKey())) continue A;
+				}
+				progress.put(ini, RaidStatus.DEFAULT);
+			}
 		}
-		// Progress Cell
-		if (cellValue instanceof RaidStatus) {
-			RaidStatus status = (RaidStatus) cellValue;
-			Instance i = data.getInstances().get(column - 1);
-			character.getProgresses().put(i, status);
-			if (DEBUG)
-				System.out.println("NEWCHECK :: " 
-						+ character.getName() + " | " 
-						+ i.getName() + ": " + status);
-		}
-		
-		FileControl.isSaved = false;
 	}
 	
 	String localize(String text) {

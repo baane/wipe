@@ -22,7 +22,7 @@ public class DateUtil {
 	
 	@SuppressWarnings("unused")
 	private void checkDailyReset() {
-		//TODO: implement
+		//TODO: implement daily reset
 	}
 	
 

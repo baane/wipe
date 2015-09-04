@@ -133,7 +133,7 @@ public class Message {
 			if (AlertType.ERROR.equals(type))
 				iconName = "error";
 			if (AlertType.CONFIRMATION.equals(type))
-				iconName = "question"; //TODO
+				iconName = "question";
 			
 			return iconName;
 		} catch (Exception e) {}
