@@ -206,18 +206,7 @@ public class FileMenu extends MenuBar {
 		
 		@Override
 		public void getAction() {
-			// TODO: think about this
-			Locales l = Locales.GERMAN;
-			for (Locales l1 : Locales.values()) {
-				if (l1.getLocale().equals(PropertyIO.LOCALE.getLocale()))
-					l = l1;
-			}
-			
-			Locales locale = Message.showOption(
-					localize("select_language"), 
-					localize("language"), 
-					l, 
-					Arrays.asList(Locales.values()));
+			Locales locale = new ChooseLanguageDialog(INATION).show();
 			if (locale == null) return;
 			
 			PropertyIO.saveToProperty(PropertyIO.LANGUAGE, locale.name());
@@ -263,13 +252,10 @@ public class FileMenu extends MenuBar {
 		@Override
 		public void getAction() {
 			Pair<String, CharacterClass> charPair = new AddCharacterDialog(INATION).show();
+			if (charPair == null) return;
 			
-			String charName = null;
-			CharacterClass charClass = null;
-			if (charPair != null) {
-				charName = charPair.getKey();
-				charClass = charPair.getValue();
-			}
+			String charName = charPair.getKey();
+			CharacterClass charClass = charPair.getValue();
 			if (charName == null || charClass == null) return;
 			c.addCharacter(charName, charClass);
 		}
@@ -407,7 +393,8 @@ public class FileMenu extends MenuBar {
 	
 	private ImageView loadIcon(String iconName) {
 		if (!iconName.endsWith(".png")) iconName += ".png";
-		String iconPath = "icons" + File.separatorChar + iconName;
+//		String iconPath = "icons" + File.separatorChar + iconName; //FIXME
+		String iconPath = "icons/" + iconName;
 		InputStream stream = null;
 		try {
 			stream = FileMenu.class.getResourceAsStream(iconPath);

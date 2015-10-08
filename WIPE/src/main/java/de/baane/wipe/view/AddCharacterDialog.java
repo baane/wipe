@@ -53,13 +53,15 @@ public class AddCharacterDialog {
 		grid.setVgap(10);
 		grid.setPadding(new Insets(10, 100, 10, 10));
 
+		String characterName = localize("Character name");
+		String characterClass = localize("Character class");
 		TextField charName = new TextField();
-		charName.setPromptText(localize("Character name"));
+		charName.setPromptText(characterName);
 		ComboBox<CharacterClass> charClass = initCharClassBox();
 
-		grid.add(new Label(localize("Character name")), 0, 0);
+		grid.add(new Label(characterName), 0, 0);
 		grid.add(charName, 1, 0);
-		grid.add(new Label(localize("Character class")), 0, 1);
+		grid.add(new Label(characterClass), 0, 1);
 		grid.add(charClass, 1, 1);
 		
 		// Enable/Disable add button depending on whether a username was entered.
@@ -107,9 +109,8 @@ public class AddCharacterDialog {
 			protected void updateItem(CharacterClass item, boolean empty) {
 				super.updateItem(item, empty);
 				
-				if (item == null || empty) {
-					setGraphic(null);
-				} else {
+				if (item == null || empty) setGraphic(null);
+				else {
 					setText(item.toString());
 					rectangle.setFill(item.getColor());
 					rectangle.setStroke(Color.BLACK);

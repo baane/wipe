@@ -141,21 +141,22 @@ public class Message {
 	}
 	
 	static ImageView getGraphic(String iconName) {
+		return getGraphic(iconName, 32);
+	}
+	static ImageView getGraphic(String iconName, int size) {
 		try {
 			String png = ".png";
 			if (!iconName.endsWith(png)) iconName += png; 
 			
 			String url = Message.class.getResource("icons/" + iconName).toString();
 			ImageView imageView = new ImageView(url);
-			int size = 32;
 			imageView.setFitWidth(size);
 			imageView.setFitHeight(size);
 			return imageView;
 		} catch (Exception e) {}
 		return null;
 	}
-
-
+	
 	private static ButtonType yesBtn() {
 		return new ButtonType(localize("Yes"), ButtonData.YES);
 	}

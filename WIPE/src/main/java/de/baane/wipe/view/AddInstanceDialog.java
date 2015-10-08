@@ -19,13 +19,21 @@ import javafx.util.Pair;
 
 public class AddInstanceDialog {
 	
-	private INation ination;
+	private INation iNation;
 
 	public AddInstanceDialog(INation iNation) {
-		this.ination = iNation;
+		this.iNation = iNation;
 	}
-
+	
 	public Pair<String, InstanceResetType> show() {
+		Optional<Pair<String, InstanceResetType>> result = initDialog().showAndWait();
+		result.ifPresent(iniNameResetType-> {
+		    System.out.println("Ininame=" + iniNameResetType.getKey() + ", Reset=" + iniNameResetType.getValue());
+		});
+		return result.isPresent() ? result.get() : null;
+	}
+	
+	private Dialog<Pair<String, InstanceResetType>> initDialog() {
 		// Create the custom dialog.
 		Dialog<Pair<String, InstanceResetType>> dialog = new Dialog<>();
 		dialog.setTitle(localize("Add instance"));
@@ -36,8 +44,8 @@ public class AddInstanceDialog {
 		dialog.setGraphic(Message.getGraphic("add"));
 
 		// Set the button types.
-		ButtonType loginButtonType = new ButtonType(localize("Add"), ButtonData.OK_DONE);
-		dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+		ButtonType addButtonType = new ButtonType(localize("Add"), ButtonData.OK_DONE);
+		dialog.getDialogPane().getButtonTypes().addAll(addButtonType, ButtonType.CANCEL);
 
 		// Create the username and password labels and fields.
 		GridPane grid = new GridPane();
@@ -45,52 +53,47 @@ public class AddInstanceDialog {
 		grid.setVgap(10);
 		grid.setPadding(new Insets(20, 150, 10, 10));
 
-		TextField iniName = new TextField();
-		iniName.setPromptText(localize("instance_name"));
-		ComboBox<InstanceResetType> iniResetType = new ComboBox<>();
-		iniResetType.getItems().addAll(InstanceResetType.values());
-		iniResetType.setValue(InstanceResetType.WEEKLY);
-		iniResetType.setPromptText(localize("instance_reset_type"));
+		String instanceName = localize("instance_name");
+		String instanceResetType = localize("instance_reset_type");
+		TextField name = new TextField();
+		name.setPromptText(instanceName);
+		ComboBox<InstanceResetType> resetType = new ComboBox<>();
+		resetType.getItems().addAll(InstanceResetType.values());
+		resetType.setValue(InstanceResetType.WEEKLY);
+		resetType.setPromptText(instanceResetType);
 		
 
-		grid.add(new Label(localize("instance_name")), 0, 0);
-		grid.add(iniName, 1, 0);
-		grid.add(new Label(localize("instance_reset_type")), 0, 1);
-		grid.add(iniResetType, 1, 1);
+		grid.add(new Label(instanceName), 0, 0);
+		grid.add(name, 1, 0);
+		grid.add(new Label(instanceResetType), 0, 1);
+		grid.add(resetType, 1, 1);
 
 		// Enable/Disable login button depending on whether a username was entered.
-		Node loginButton = dialog.getDialogPane().lookupButton(loginButtonType);
+		Node loginButton = dialog.getDialogPane().lookupButton(addButtonType);
 		loginButton.setDisable(true);
 
 		// Do some validation (using the Java 8 lambda syntax).
-		iniName.textProperty().addListener((observable, oldValue, newValue) -> {
+		name.textProperty().addListener((observable, oldValue, newValue) -> {
 		    loginButton.setDisable(newValue.trim().isEmpty());
 		});
 
 		dialog.getDialogPane().setContent(grid);
 
 		// Request focus on the username field by default.
-		Platform.runLater(() -> iniName.requestFocus());
+		Platform.runLater(() -> name.requestFocus());
 
 		// Convert the result to a username-password-pair when the login button is clicked.
 		dialog.setResultConverter(dialogButton -> {
-		    if (dialogButton == loginButtonType) {
-		        return new Pair<>(iniName.getText(), iniResetType.getValue());
-		    }
-		    return null;
+		    if (dialogButton != addButtonType) return null;
+		    return new Pair<>(name.getText(), resetType.getValue());
 		});
 
-		Optional<Pair<String, InstanceResetType>> result = dialog.showAndWait();
-		
-		result.ifPresent(iniNameResetType-> {
-		    System.out.println("Ininame=" + iniNameResetType.getKey() + ", Reset=" + iniNameResetType.getValue());
-		});
-		return result.isPresent() ? result.get() : null;
+		return dialog;
 	}
 	
 	private String localize(String text) {
-		if(ination == null) return text;
-		return ination.getTranslation(text);
+		if(iNation == null) return text;
+		return iNation.getTranslation(text);
 	}
 	
 }
