@@ -34,15 +34,12 @@ public class DataHolder implements Serializable {
 	}
 	
 	public Character findCharacter(int id) {
-		for (Character c : characters)
-			if (c.getId() == id) return c;
+		for (Character c : getCharacters()) if (c.getId() == id) return c;
 		return null;
 	}
 	
 	public Instance findInstance(int id) {
-		for (Instance i : instances)
-			if (i.getId() == id) return i;
+		for (Instance i : getInstances()) if (i.getId() == id) return i;
 		return null;
 	}
-
 }
