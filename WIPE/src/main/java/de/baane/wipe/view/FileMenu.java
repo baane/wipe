@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 import de.baane.wipe.MainFX;
 import de.baane.wipe.control.FileControl;
-import de.baane.wipe.control.TableControlBase;
+import de.baane.wipe.control.TableControl;
 import de.baane.wipe.control.WindowControl;
 import de.baane.wipe.control.data.PropertyIO;
 import de.baane.wipe.model.Character;
@@ -334,9 +334,9 @@ public class FileMenu extends MenuBar {
 		}
 	}
 	
-	private TableControlBase c;
+	private TableControl c;
 	
-	public FileMenu(TableControlBase c) {
+	public FileMenu(TableControl c) {
 		this.c = c;
 		initMenu();
 	}
@@ -393,7 +393,6 @@ public class FileMenu extends MenuBar {
 	
 	private ImageView loadIcon(String iconName) {
 		if (!iconName.endsWith(".png")) iconName += ".png";
-//		String iconPath = "icons" + File.separatorChar + iconName; //FIXME
 		String iconPath = "icons/" + iconName;
 		InputStream stream = null;
 		try {
