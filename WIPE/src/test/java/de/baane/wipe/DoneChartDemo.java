@@ -25,16 +25,14 @@ public class DoneChartDemo extends Application {
 		launch(args);
 	}
 	
-	DataHolder d = new DataHolder();
-	
 	@Override
 	public void start(Stage stage) {
 		// Initialize data
 		FileControl.openLastFile();
-		d = DataIO.loadFromXMl(FileControl.SAVE_FILE);
+		DataHolder d = DataIO.loadFromXMl(FileControl.SAVE_FILE);
 		if (d == null) {
 			System.err.println("No save file found.");
-			System.exit(1);
+			return;
 		}
 		
 		ArrayList<Character> characters = d.getCharacters();
@@ -43,18 +41,17 @@ public class DoneChartDemo extends Application {
 			LinkedHashMap<Instance, RaidStatus> progresses = c.getProgresses();
 			for (Instance i : progresses.keySet()) {
 				RaidStatus status = progresses.get(i);
-				String name = status.toString();
-				if (!map.containsKey(name))
-					map.put(name, 1);
+				String statusName = status.toString();
+				if (!map.containsKey(statusName))
+					map.put(statusName, 1);
 				else
-					map.put(name, map.get(name).intValue() + 1);
+					map.put(statusName, map.get(statusName).intValue() + 1);
 			}
 		}
 		
-		ObservableList<PieChart.Data> pieChartData = FXCollections
-				.observableArrayList();
+		ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
 		for (String status : map.keySet()) {
-			pieChartData.add(new PieChart.Data(status, map.get(status)));
+			chartData.add(new PieChart.Data(status, map.get(status)));
 		}
 		
 		// Initialize chart
@@ -63,7 +60,7 @@ public class DoneChartDemo extends Application {
 		stage.setWidth(500);
 		stage.setHeight(500);
 		
-		final PieChart chart = new PieChart(pieChartData);
+		final PieChart chart = new PieChart(chartData);
 		chart.setTitle("Raid Status");
 		chart.setLegendSide(Side.LEFT);
 		
